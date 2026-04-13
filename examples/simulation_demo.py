@@ -4,15 +4,22 @@ This example demonstrates basic usage of the OpenArm simulation environment
 by creating a simple oscillating motion on the first joint of both arms
 using position control while visualizing the result in MuJoCo's viewer.
 """
+import argparse
 
 import math
 
 import mujoco.viewer
 
 from openarm.simulation import OpenArmSimulation
+from openarm.simulation.models import OPENARM_SCENE_PATH
 
-# Create simulation instance with default OpenArm model
-sim = OpenArmSimulation()
+parser = argparse.ArgumentParser(description="OpenArm simulation demo.")
+parser.add_argument("--xml", type=str, default=str(OPENARM_SCENE_PATH),
+                    help="Path to MuJoCo XML scene")
+args = parser.parse_args()
+
+# Create simulation instance with OpenArm scene (floor, lighting, sky)
+sim = OpenArmSimulation(model_path=args.xml)
 
 with mujoco.viewer.launch_passive(sim.model, sim.data) as viewer:
     step_count = 0
